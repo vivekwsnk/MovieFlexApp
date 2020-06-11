@@ -12,13 +12,15 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
        var activityIndicator = UIActivityIndicatorView()
     var arrayItems: [movieObject]?
     var serchItems: [movieObject]?
-    let cellIdentifier = "movieCell"
+    let cellIdentifier = "TopRatedCell"
+    private let refreshControl = UIRefreshControl()
+
     lazy var searchBar : UISearchBar = {
         let s = UISearchBar()
         s.placeholder = "Search Movies"
         s.delegate = self
         s.tintColor = .white
-        s.barTintColor = UIColor.yellow
+        s.barTintColor = AppConstants.BaseColor.yellowColor
         //s.barStyle = .default
         s.sizeToFit()
         return s
@@ -54,8 +56,22 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
 
         
         setupCollectionView()
+        
+        
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
+        topratedCollectionView.alwaysBounceVertical = true
+        topratedCollectionView.refreshControl = refreshControl // iOS 10+
         // setupCollectionViewItemSize()
         // Do any additional setup after loading the view.
+    }
+    
+    @objc
+    private func didPullToRefresh(_ sender: Any) {
+        // Do you your api calls in here, and then asynchronously remember to stop the
+        // refreshing when you've got a result (either positive or negative)
+        activityIndicator.startAnimating()
+        viewModel.getMovies(type: .TopRate)
+        refreshControl.endRefreshing()
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -78,7 +94,7 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "movieCell", for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TopRatedCell", for: indexPath)
         header.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.leftAnchor.constraint(equalTo: header.leftAnchor).isActive = true
@@ -140,7 +156,7 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = topratedCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MovieCustomCell
+        let cell = topratedCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! TopRateCustomCell
         
         
         if searchBar.text != ""{
@@ -163,6 +179,11 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
                 cell.movieImg.isHidden = false
             })
             
+            cell.index = indexPath
+            cell.delegate = self
+            
+           
+            
         } else {
             let row = arrayItems?[indexPath.row]
             
@@ -182,6 +203,10 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
                 cell.movieImg.image = image
                 cell.movieImg.isHidden = false
             })
+            
+            cell.index = indexPath
+            cell.delegate = self
+            
         }
         
         // }
@@ -235,10 +260,51 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
 extension TopRatedVC: UICollectionViewDelegateFlowLayout {
     ///Set  size of the cell for collection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cell = topratedCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MovieCustomCell
+        let cell = topratedCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! TopRateCustomCell
         cell.frame.size.height = (225) + (cell.movieDescription.frame.size.height)
         let size = CGSize(width: 400, height: cell.frame.size.height )
         return size
     }
 }
 
+
+extension TopRatedVC: DataCollectionProtocolForRated
+{
+    func deleteData(indx: Int) {
+        self.remove(indx)
+    }
+    
+    
+    func remove(_ i: Int) {
+        
+        if searchBar.text != ""{
+            
+            
+            serchItems?.remove(at: i)
+            
+            let indexPath = IndexPath(row: i, section: 0)
+            
+            self.topratedCollectionView.performBatchUpdates({
+                self.topratedCollectionView.deleteItems(at: [indexPath])
+            }) { (finished) in
+                self.topratedCollectionView.reloadItems(at: self.topratedCollectionView.indexPathsForVisibleItems)
+            }
+            
+        }else
+        {
+            
+            arrayItems?.remove(at: i)
+            
+            let indexPath = IndexPath(row: i, section: 0)
+            
+            self.topratedCollectionView.performBatchUpdates({
+                self.topratedCollectionView.deleteItems(at: [indexPath])
+            }) { (finished) in
+                self.topratedCollectionView.reloadItems(at: self.topratedCollectionView.indexPathsForVisibleItems)
+            }
+        }
+        
+        
+        
+    }
+}

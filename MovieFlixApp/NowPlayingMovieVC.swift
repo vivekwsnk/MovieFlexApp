@@ -10,6 +10,8 @@ class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate 
     let searchController = UISearchController(searchResultsController: nil)
      var collectionViewFlowLayout: UICollectionViewFlowLayout!
     var activityIndicator = UIActivityIndicatorView()
+    private let refreshControl = UIRefreshControl()
+
     var arrayItems: [movieObject]?
     var serchItems: [movieObject]?
     let cellIdentifier = "movieCell"
@@ -18,7 +20,7 @@ class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate 
         s.placeholder = "Search Movies"
         s.delegate = self
         s.tintColor = .white
-        s.barTintColor = UIColor.yellow
+        s.barTintColor = AppConstants.BaseColor.yellowColor
             //s.barStyle = .default
         s.sizeToFit()
         return s
@@ -52,8 +54,22 @@ class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate 
         movieCollectionView?.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier:cellIdentifier)
 
         setupCollectionView()
+        
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
+        movieCollectionView.alwaysBounceVertical = true
+        movieCollectionView.refreshControl = refreshControl // iOS 10+
+        
        // setupCollectionViewItemSize()
         // Do any additional setup after loading the view.
+    }
+    
+    @objc
+    private func didPullToRefresh(_ sender: Any) {
+        // Do you your api calls in here, and then asynchronously remember to stop the
+        // refreshing when you've got a result (either positive or negative)
+        activityIndicator.startAnimating()
+        viewModel.getMovies(type: .NowPlaying)
+        refreshControl.endRefreshing()
     }
    
     override func viewWillLayoutSubviews() {
@@ -170,13 +186,16 @@ extension NowPlayingMovieVC: UICollectionViewDataSource,UICollectionViewDelegate
                 cell.movieImg.isHidden = false
             })
             
+            cell.index = indexPath
+            cell.delegate = self
+            
         } else {
             let row = arrayItems?[indexPath.row]
             
             cell.movieTitle.text = row?.title
             cell.movieDescription.text = row?.overview
             
-            cell.movieDescription.lineBreakMode = .byWordWrapping //in versions below swift 3 (messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping)
+            cell.movieDescription.lineBreakMode = .byClipping //in versions below swift 3 (messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping)
             cell.movieDescription.numberOfLines = 0 //To write any number of lines within a label scope
             
             cell.movieDescription.textAlignment = .left
@@ -189,6 +208,9 @@ extension NowPlayingMovieVC: UICollectionViewDataSource,UICollectionViewDelegate
                 cell.movieImg.image = image
                 cell.movieImg.isHidden = false
             })
+            
+            cell.index = indexPath
+            cell.delegate = self
         }
     
 
@@ -243,8 +265,49 @@ extension NowPlayingMovieVC: UICollectionViewDelegateFlowLayout {
     ///Set  size of the cell for collection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
        let cell = movieCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MovieCustomCell
-        cell.frame.size.height = (225) + (cell.movieDescription.frame.size.height)
-        let size = CGSize(width: 400, height: cell.frame.size.height )
+        cell.frame.size.height = (220) + (cell.movieDescription.frame.size.height)
+        let size = CGSize(width: 400, height:  cell.frame.size.height)
         return size
+    }
+}
+
+extension NowPlayingMovieVC: DataCollectionProtocol
+{
+    func deleteData(indx: Int) {
+        self.remove(indx)
+    }
+    
+    
+    func remove(_ i: Int) {
+        
+         if searchBar.text != ""{
+            
+            
+            serchItems?.remove(at: i)
+            
+            let indexPath = IndexPath(row: i, section: 0)
+            
+            self.movieCollectionView.performBatchUpdates({
+                self.movieCollectionView.deleteItems(at: [indexPath])
+            }) { (finished) in
+                self.movieCollectionView.reloadItems(at: self.movieCollectionView.indexPathsForVisibleItems)
+            }
+            
+        }else
+         {
+            
+            arrayItems?.remove(at: i)
+            
+            let indexPath = IndexPath(row: i, section: 0)
+            
+            self.movieCollectionView.performBatchUpdates({
+                self.movieCollectionView.deleteItems(at: [indexPath])
+            }) { (finished) in
+                self.movieCollectionView.reloadItems(at: self.movieCollectionView.indexPathsForVisibleItems)
+            }
+        }
+        
+        
+        
     }
 }

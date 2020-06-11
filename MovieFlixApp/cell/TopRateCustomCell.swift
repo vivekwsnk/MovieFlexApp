@@ -1,32 +1,30 @@
 //
-//  MovieCustomCell.swift
+//  TopRateCustomCell.swift
 //  MovieFlixApp
 //
-//  Created by Apple on 10/06/20.
+//  Created by Apple on 11/06/20.
 //  Copyright © 2020 Apple. All rights reserved.
 //
 
 import UIKit
 
-protocol DataCollectionProtocol {
+protocol DataCollectionProtocolForRated {
     func deleteData(indx:Int)
 }
-
-class MovieCustomCell: UICollectionViewCell {
-    @IBOutlet weak var movieTitle: UILabel!
-    @IBOutlet weak var deleteBtn: UIButton!
+class TopRateCustomCell: UICollectionViewCell {
     
-    var delegate: DataCollectionProtocol?
+    @IBOutlet weak var movieTitle: UILabel!
+    
+    var delegate: DataCollectionProtocolForRated?
     var index:IndexPath?
     
     
     @IBOutlet weak var movieDescription: UILabel!
     @IBOutlet weak var movieImg: UIImageView!
     
-    
-    @IBAction func actionOnDeleteBtn(_ sender: Any) {
-        
+    @IBAction func actionOnDeleteCell(_ sender: Any) {
         delegate?.deleteData(indx: index!.row)
     }
     
+   
 }

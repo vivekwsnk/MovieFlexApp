@@ -27,6 +27,7 @@
 		18AEF3232490E26E00EDFA15 /* CustomLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEF3222490E26E00EDFA15 /* CustomLayout.swift */; };
 		18AEF3252490E72A00EDFA15 /* MovieCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEF3242490E72A00EDFA15 /* MovieCustomCell.swift */; };
 		18AEF3272491297D00EDFA15 /* movieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEF3262491297D00EDFA15 /* movieDetailViewController.swift */; };
+		18AEF3292491FE6C00EDFA15 /* TopRateCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AEF3282491FE6C00EDFA15 /* TopRateCustomCell.swift */; };
 		43EB11DAD1FDD5E5C5EFE1B7 /* Pods_MovieFlixApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BF4D433D36656982DC17BB /* Pods_MovieFlixApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		18AEF3222490E26E00EDFA15 /* CustomLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayout.swift; sourceTree = "<group>"; };
 		18AEF3242490E72A00EDFA15 /* MovieCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCustomCell.swift; sourceTree = "<group>"; };
 		18AEF3262491297D00EDFA15 /* movieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = movieDetailViewController.swift; sourceTree = "<group>"; };
+		18AEF3282491FE6C00EDFA15 /* TopRateCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopRateCustomCell.swift; sourceTree = "<group>"; };
 		4B3CB84AE59ADA7B48089713 /* Pods-MovieFlixApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieFlixApp.debug.xcconfig"; path = "Target Support Files/Pods-MovieFlixApp/Pods-MovieFlixApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7B8AC197D01176D83770C951 /* Pods-MovieFlixApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieFlixApp.release.xcconfig"; path = "Target Support Files/Pods-MovieFlixApp/Pods-MovieFlixApp.release.xcconfig"; sourceTree = "<group>"; };
 		F0BF4D433D36656982DC17BB /* Pods_MovieFlixApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieFlixApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				18AEF3242490E72A00EDFA15 /* MovieCustomCell.swift */,
+				18AEF3282491FE6C00EDFA15 /* TopRateCustomCell.swift */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				1863BB75248F41B5005A3B7A /* TopRatedVC.swift in Sources */,
 				1863BB71248F41B5005A3B7A /* AppDelegate.swift in Sources */,
 				18AEF2DF248FA6DF00EDFA15 /* Movie.swift in Sources */,
+				18AEF3292491FE6C00EDFA15 /* TopRateCustomCell.swift in Sources */,
 				18AEF2F1248FAA5F00EDFA15 /* NSObjectExtension.swift in Sources */,
 				18AEF2F6248FAACA00EDFA15 /* EndPoints.swift in Sources */,
 				1863BB73248F41B5005A3B7A /* NowPlayingMovieVC.swift in Sources */,

@@ -18,6 +18,8 @@ struct AppConstants {
     static let keyPath      : String = "api_key="
     static let baseUrl      : String = AppConstants.protocolo + AppConstants.domain + AppConstants.apiVersion
     
+    
+
     struct TabBarItems {
         
         struct  Movies {
@@ -26,11 +28,7 @@ struct AppConstants {
             static let imageDisabled = "MoviesDisabled"
         }
         
-        struct TvShows {
-            static let name =  "TvShowsViewController"
-            static let imageEnbled = "TvShowsEnabled"
-            static let imageDisabled = "TvShowsDisabled"
-        }
+        
     }
     
     struct Movies {
@@ -45,9 +43,14 @@ struct AppConstants {
     
     struct ViewControllerIdentifier {
         
-        static let REVEALVIEWCONTROLLER = "revealVCStoryboardID"
        
         static let MOVIEDETAILCONTROLLER = "movieDetailViewControllerID"
+        
+    }
+    
+    struct BaseColor {
+        
+       static let yellowColor = UIColor(red: 247.0/255, green: 177.0/255, blue: 88.0/255, alpha: 1.0)
         
     }
 }
