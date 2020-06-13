@@ -6,25 +6,30 @@
 
 import UIKit
 
-class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
+class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchControllerDelegate,UISearchResultsUpdating,UISearchBarDelegate {
+    @IBOutlet weak var newSearchBar: UISearchBar!
+    
     let searchController = UISearchController(searchResultsController: nil)
      var collectionViewFlowLayout: UICollectionViewFlowLayout!
     var activityIndicator = UIActivityIndicatorView()
     private let refreshControl = UIRefreshControl()
+    var controladorDeBusca: UISearchController!
+
 
     var arrayItems: [movieObject]?
     var serchItems: [movieObject]?
     let cellIdentifier = "movieCell"
-    lazy var searchBar : UISearchBar = {
-        let s = UISearchBar()
-        s.placeholder = "Search Movies"
-        s.delegate = self
-        s.tintColor = .white
-        s.barTintColor = AppConstants.BaseColor.yellowColor
-            //s.barStyle = .default
-        s.sizeToFit()
-        return s
-    }()
+//    lazy var searchBar : UISearchBar = {
+//        let s = UISearchBar()
+//        s.endEditing(false)
+//        s.placeholder = "Search Movies"
+//        s.delegate = self
+//        s.tintColor = .white
+//        s.barTintColor = AppConstants.BaseColor.yellowColor
+//            //s.barStyle = .default
+//        s.sizeToFit()
+//        return s
+//    }()
     @IBOutlet weak var movieCollectionView: UICollectionView!
     func reloadTable(type: Int) {
         DispatchQueue.main.sync {
@@ -61,6 +66,18 @@ class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate 
         
        // setupCollectionViewItemSize()
         // Do any additional setup after loading the view.
+        
+         newSearchBar.delegate = self
+//        searchController.searchResultsUpdater = self
+//        searchController.obscuresBackgroundDuringPresentation = false
+//        searchController.searchBar.placeholder = "Type something here to search"
+//        navigationItem.searchController = searchController
+    }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        print(text)
     }
     
     @objc
@@ -91,46 +108,44 @@ class NowPlayingMovieVC: UIViewController,ViewModelDelegate,UISearchBarDelegate 
         return CGSize(width: view.frame.width, height: 40)
     }
    
-     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "movieCell", for: indexPath)
-        header.addSubview(searchBar)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.leftAnchor.constraint(equalTo: header.leftAnchor).isActive = true
-        searchBar.rightAnchor.constraint(equalTo: header.rightAnchor).isActive = true
-        searchBar.topAnchor.constraint(equalTo: header.topAnchor).isActive = true
-        searchBar.bottomAnchor.constraint(equalTo: header.bottomAnchor).isActive = true
-        return header
-    }
-    
-//    private func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-//        print("searchText \(searchText)")
-//        filterFootballers(for: searchText ?? "")
-//    }
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("searchText \(searchText)")
-        filterFootballers(for: searchText ?? "")
-    }
 
     
-    private func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        print("searchText \(searchBar.text ?? "0")")
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("searchText \(searchText)")
+
+       newSearchBar.showsCancelButton = true
+       searchMovieFilter(for: searchText ?? "")
     }
     
-    private func filterFootballers(for searchText: String) {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        //newSearchBar.text = ""
+        newSearchBar.showsCancelButton = true
+        self.newSearchBar.endEditing(true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        //newSearchBar.text = nil
+        newSearchBar.showsCancelButton = false
+        
+        // Remove focus from the search bar.
+        newSearchBar.endEditing(true)
+        
+        // Perform any necessary work.  E.g., repopulating a table view
+        // if the search bar performs filtering.
+    }
+    
+
+
+    private func searchMovieFilter(for searchText: String) {
         let row = arrayItems?[0]
         serchItems = arrayItems!.filter { row in
             return (row.title.lowercased().contains(searchText.lowercased()))
         }
-        
-        if searchText.count > 4
-        {
-            movieCollectionView.reloadData()
-        }
-        if searchText.count == 0
-        {
-            movieCollectionView.reloadData()
-        }
-       //
+        movieCollectionView.reloadData()
+
+
     }
 }
 
@@ -143,7 +158,7 @@ extension NowPlayingMovieVC: UICollectionViewDataSource,UICollectionViewDelegate
         {
             return 0
         }
-        if  searchBar.text != "" {
+        if  newSearchBar.text != "" {
             return serchItems!.count
         }
         else
@@ -166,29 +181,29 @@ extension NowPlayingMovieVC: UICollectionViewDataSource,UICollectionViewDelegate
 //            arrayItems = dataItems.results
         
        
-        if searchBar.text != ""{
+        if newSearchBar.text != ""{
             let row = serchItems?[indexPath.row]
-            
+
             cell.movieTitle.text = row?.title
             cell.movieDescription.text = row?.overview
-            
+
             cell.movieDescription.lineBreakMode = .byWordWrapping //in versions below swift 3 (messageLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping)
             cell.movieDescription.numberOfLines = 0 //To write any number of lines within a label scope
-            
+
             cell.movieDescription.textAlignment = .left
             cell.movieDescription.sizeToFit()
-            
+
             print(cell.frame.size.height)
             print(cell.movieDescription.frame.size.height)
-            
+
             ImageLoader.getImagen(name: row!.poster_path, round: false, width: 300, height: 400, completion: { (image) in
                 cell.movieImg.image = image
                 cell.movieImg.isHidden = false
             })
-            
+
             cell.index = indexPath
             cell.delegate = self
-            
+
         } else {
             let row = arrayItems?[indexPath.row]
             
@@ -224,19 +239,19 @@ extension NowPlayingMovieVC: UICollectionViewDataSource,UICollectionViewDelegate
         let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let MovieDetailInstance = mainStoryBoard.instantiateViewController(withIdentifier: AppConstants.ViewControllerIdentifier.MOVIEDETAILCONTROLLER) as! movieDetailViewController
         
-        if searchBar.text != ""{
+        if newSearchBar.text != ""{
             let row = serchItems?[indexPath.row]
-            
-            
+
+
             MovieDetailInstance.titleString = row!.title
             MovieDetailInstance.dateString = row!.release_date
             MovieDetailInstance.detailString = row!.overview
-            
+
             ImageLoader.getImagen(name: row!.poster_path, round: false, width: 300, height: 400, completion: { (image) in
                MovieDetailInstance.finalImage = image
-                
+
             })
-            
+
         } else {
             let row = arrayItems?[indexPath.row]
             
@@ -280,22 +295,22 @@ extension NowPlayingMovieVC: DataCollectionProtocol
     
     func remove(_ i: Int) {
         
-         if searchBar.text != ""{
-            
-            
+         if newSearchBar.text != ""{
+
+
             serchItems?.remove(at: i)
-            
+
             let indexPath = IndexPath(row: i, section: 0)
-            
+
             self.movieCollectionView.performBatchUpdates({
                 self.movieCollectionView.deleteItems(at: [indexPath])
             }) { (finished) in
                 self.movieCollectionView.reloadItems(at: self.movieCollectionView.indexPathsForVisibleItems)
             }
-            
+
         }else
          {
-            
+        
             arrayItems?.remove(at: i)
             
             let indexPath = IndexPath(row: i, section: 0)

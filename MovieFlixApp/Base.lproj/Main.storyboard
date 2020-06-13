@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Sij-ki-45f">
-                                <rect key="frame" x="0.0" y="10" width="414" height="803"/>
+                                <rect key="frame" x="0.0" y="85" width="414" height="728"/>
                                 <color key="backgroundColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="vGh-5x-ha0">
                                     <size key="itemSize" width="414" height="225"/>
@@ -111,12 +111,26 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <searchBar contentMode="redraw" placeholder="Search Movies" translatesAutoresizingMaskIntoConstraints="NO" id="Cjg-bS-abt">
+                                <rect key="frame" x="0.0" y="25" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="pdj-b8-i89"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="9pv-A4-QxB" id="NyI-UN-WAF"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Sij-ki-45f" firstAttribute="top" secondItem="tsR-hK-woN" secondAttribute="top" constant="10" id="5Lc-50-hfo"/>
+                            <constraint firstItem="Sij-ki-45f" firstAttribute="top" secondItem="tsR-hK-woN" secondAttribute="top" constant="85" id="5Lc-50-hfo"/>
+                            <constraint firstItem="Cjg-bS-abt" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="AdI-zQ-KEz"/>
                             <constraint firstItem="Sij-ki-45f" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="Bbn-Gp-L0x"/>
                             <constraint firstItem="Sij-ki-45f" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="CSd-Sq-RUE"/>
+                            <constraint firstItem="Cjg-bS-abt" firstAttribute="top" secondItem="tsR-hK-woN" secondAttribute="top" constant="25" id="UcQ-9x-EDU"/>
+                            <constraint firstItem="Cjg-bS-abt" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="YQQ-h3-QBn"/>
                             <constraint firstItem="Sij-ki-45f" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="lgY-aj-5Zr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
@@ -124,7 +138,8 @@
                     <navigationItem key="navigationItem" id="iMd-0k-U8t"/>
                     <connections>
                         <outlet property="movieCollectionView" destination="Sij-ki-45f" id="1Nf-jr-Rju"/>
-                        <outlet property="searchDisplayController" destination="X6D-JX-5OD" id="PCU-gl-hhw"/>
+                        <outlet property="newSearchBar" destination="Cjg-bS-abt" id="Kxr-nu-jix"/>
+                        <outlet property="searchDisplayController" destination="VRO-cp-VCS" id="2DV-8U-Vo5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -134,6 +149,14 @@
                         <outlet property="searchContentsController" destination="9pv-A4-QxB" id="i1Q-tC-HVD"/>
                         <outlet property="searchResultsDataSource" destination="9pv-A4-QxB" id="5ax-Nz-tn2"/>
                         <outlet property="searchResultsDelegate" destination="9pv-A4-QxB" id="hBq-8B-hty"/>
+                    </connections>
+                </searchDisplayController>
+                <searchDisplayController id="VRO-cp-VCS">
+                    <connections>
+                        <outlet property="delegate" destination="9pv-A4-QxB" id="Tkl-Tn-0NS"/>
+                        <outlet property="searchContentsController" destination="9pv-A4-QxB" id="9uC-lf-rfu"/>
+                        <outlet property="searchResultsDataSource" destination="9pv-A4-QxB" id="hhG-7c-EuT"/>
+                        <outlet property="searchResultsDelegate" destination="9pv-A4-QxB" id="lYb-la-oQj"/>
                     </connections>
                 </searchDisplayController>
             </objects>
@@ -148,7 +171,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gZT-Cc-p5P">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                                <rect key="frame" x="0.0" y="85" width="414" height="728"/>
                                 <color key="backgroundColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Fp0-iQ-Mt2">
                                     <size key="itemSize" width="414" height="225"/>
@@ -200,11 +223,10 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MPU-rI-Qe2">
-                                                    <rect key="frame" x="15" y="189" width="55" height="30"/>
+                                                    <rect key="frame" x="15" y="189" width="45" height="30"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="ITt-WL-inK"/>
-                                                        <constraint firstAttribute="width" constant="55" id="hKS-To-7zf"/>
                                                     </constraints>
                                                     <state key="normal" title="Delete">
                                                         <color key="titleColor" white="0.0" alpha="0.79470180459999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -217,6 +239,7 @@
                                         </view>
                                         <color key="backgroundColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MPU-rI-Qe2" secondAttribute="trailing" symbolic="YES" id="8Hz-OE-CT7"/>
                                             <constraint firstAttribute="bottom" secondItem="G9f-ss-cQZ" secondAttribute="bottom" id="DaF-yk-Ot7"/>
                                             <constraint firstItem="MPU-rI-Qe2" firstAttribute="leading" secondItem="xl9-sH-GQd" secondAttribute="leading" constant="15" id="P7L-Ts-Fez"/>
                                             <constraint firstItem="I63-tC-1JV" firstAttribute="leading" secondItem="0NV-Xr-aFj" secondAttribute="trailing" constant="2" id="eEI-VB-5ee"/>
@@ -239,18 +262,33 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <searchBar contentMode="redraw" text="" placeholder="Search Movies" translatesAutoresizingMaskIntoConstraints="NO" id="Kmx-cY-SuW">
+                                <rect key="frame" x="0.0" y="25" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="K6M-aR-9g1"/>
+                                </constraints>
+                                <color key="barTintColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="9pv-A4-QxB" id="YNV-pg-Ijp"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="O1u-W8-tvY" firstAttribute="bottom" secondItem="gZT-Cc-p5P" secondAttribute="bottom" id="6fF-bN-8L1"/>
+                            <constraint firstItem="Kmx-cY-SuW" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="top" constant="25" id="Lgd-69-TwP"/>
                             <constraint firstAttribute="trailing" secondItem="gZT-Cc-p5P" secondAttribute="trailing" id="Qp4-bj-SnM"/>
+                            <constraint firstAttribute="trailing" secondItem="Kmx-cY-SuW" secondAttribute="trailing" id="YW2-5S-uix"/>
                             <constraint firstItem="gZT-Cc-p5P" firstAttribute="leading" secondItem="O1u-W8-tvY" secondAttribute="leading" id="lQY-Al-CIo"/>
-                            <constraint firstItem="gZT-Cc-p5P" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="top" id="sd4-eL-6Th"/>
+                            <constraint firstItem="Kmx-cY-SuW" firstAttribute="leading" secondItem="O1u-W8-tvY" secondAttribute="leading" id="n9S-9M-6IK"/>
+                            <constraint firstItem="gZT-Cc-p5P" firstAttribute="top" secondItem="QS5-Rx-YEW" secondAttribute="top" constant="85" id="sd4-eL-6Th"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
                     <navigationItem key="navigationItem" id="96R-Si-VLP"/>
                     <connections>
+                        <outlet property="newSearchBar" destination="Kmx-cY-SuW" id="9rd-vJ-Kea"/>
                         <outlet property="topratedCollectionView" destination="gZT-Cc-p5P" id="Zwc-Rg-ABf"/>
                     </connections>
                 </viewController>
@@ -360,17 +398,20 @@
         <!--Now Playing-->
         <scene sceneID="4ST-hI-8QH">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="JmX-do-x9K" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="JmX-do-x9K" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Now Playing" image="movieBlack" selectedImage="movieBlack" id="acW-dT-cKf">
                         <color key="badgeColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="e7s-hl-M3f">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.63921568630000003" blue="0.12549019610000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" red="0.96862745100000003" green="0.69411764710000001" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="PJN-wX-9s6">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="rootViewController" id="gb0-A0-UCm"/>
                     </connections>
@@ -382,11 +423,10 @@
         <!--Top Rated-->
         <scene sceneID="flt-bA-FeH">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ioe-Ja-6Hk" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="ioe-Ja-6Hk" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Top Rated" image="starBlack" id="cPa-gy-q4n"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2TC-DY-Bfh">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

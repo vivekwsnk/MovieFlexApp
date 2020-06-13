@@ -7,6 +7,8 @@ import UIKit
 
 class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
     @IBOutlet weak var topratedCollectionView: UICollectionView!
+    @IBOutlet weak var newSearchBar: UISearchBar!
+
     
     var collectionViewFlowLayout: UICollectionViewFlowLayout!
        var activityIndicator = UIActivityIndicatorView()
@@ -15,16 +17,7 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
     let cellIdentifier = "TopRatedCell"
     private let refreshControl = UIRefreshControl()
 
-    lazy var searchBar : UISearchBar = {
-        let s = UISearchBar()
-        s.placeholder = "Search Movies"
-        s.delegate = self
-        s.tintColor = .white
-        s.barTintColor = AppConstants.BaseColor.yellowColor
-        //s.barStyle = .default
-        s.sizeToFit()
-        return s
-    }()
+    
    
     func reloadTable(type: Int) {
         DispatchQueue.main.sync {
@@ -56,6 +49,8 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
 
         
         setupCollectionView()
+        
+         newSearchBar.delegate = self
         
         
         refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
@@ -93,41 +88,41 @@ class TopRatedVC: UIViewController,ViewModelDelegate,UISearchBarDelegate {
         return CGSize(width: view.frame.width, height: 40)
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "TopRatedCell", for: indexPath)
-        header.addSubview(searchBar)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.leftAnchor.constraint(equalTo: header.leftAnchor).isActive = true
-        searchBar.rightAnchor.constraint(equalTo: header.rightAnchor).isActive = true
-        searchBar.topAnchor.constraint(equalTo: header.topAnchor).isActive = true
-        searchBar.bottomAnchor.constraint(equalTo: header.bottomAnchor).isActive = true
-        return header
-    }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print("searchText \(searchText)")
-        filterFootballers(for: searchText ?? "")
+        
+        newSearchBar.showsCancelButton = true
+        searchMovieFilter(for: searchText ?? "")
     }
     
     
-    private func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        print("searchText \(searchBar.text ?? "0")")
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        //newSearchBar.text = ""
+        self.newSearchBar.endEditing(true)
     }
     
-    private func filterFootballers(for searchText: String) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        //newSearchBar.text = nil
+        newSearchBar.showsCancelButton = false
+        
+        // Remove focus from the search bar.
+        newSearchBar.endEditing(true)
+        
+        // Perform any necessary work.  E.g., repopulating a table view
+        // if the search bar performs filtering.
+    }
+    
+    
+    
+    private func searchMovieFilter(for searchText: String) {
         let row = arrayItems?[0]
         serchItems = arrayItems!.filter { row in
             return (row.title.lowercased().contains(searchText.lowercased()))
         }
+        topratedCollectionView.reloadData()
         
-        if searchText.count > 4
-        {
-            topratedCollectionView.reloadData()
-        }
-        if searchText.count == 0
-        {
-            topratedCollectionView.reloadData()
-        }
-        //
+        
     }
     
     
@@ -144,7 +139,7 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
         {
             return 0
         }
-        if  searchBar.text != "" {
+        if  newSearchBar.text != "" {
             return serchItems!.count
         }
         else
@@ -159,7 +154,7 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
         let cell = topratedCollectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! TopRateCustomCell
         
         
-        if searchBar.text != ""{
+        if newSearchBar.text != ""{
             let row = serchItems?[indexPath.row]
             
             cell.movieTitle.text = row?.title
@@ -219,7 +214,7 @@ extension TopRatedVC: UICollectionViewDataSource,UICollectionViewDelegate {
         let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
         let MovieDetailInstance = mainStoryBoard.instantiateViewController(withIdentifier: AppConstants.ViewControllerIdentifier.MOVIEDETAILCONTROLLER) as! movieDetailViewController
         
-        if searchBar.text != ""{
+        if newSearchBar.text != ""{
             let row = serchItems?[indexPath.row]
             
             
@@ -277,7 +272,7 @@ extension TopRatedVC: DataCollectionProtocolForRated
     
     func remove(_ i: Int) {
         
-        if searchBar.text != ""{
+        if newSearchBar.text != ""{
             
             
             serchItems?.remove(at: i)
