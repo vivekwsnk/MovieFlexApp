@@ -1,0 +1,14 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.4",
+    "version": 1,
+    "components": [
+        {
+            "type": "library",
+            "name": "Alamofire",
+            "version": "5.6",
+            "purl": "pkg:cocoapods/Alamofire@5.6",
+            "scope": "required"
+        }
+    ]
+}
