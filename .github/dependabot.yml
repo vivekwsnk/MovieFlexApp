@@ -6,7 +6,7 @@
 version: 2
 updates:
   # For CocoaPods dependencies
-  - package-ecosystem: "cocoapods"
+  - package-ecosystem: "swift"
     directory: "/" # Path to your Podfile, usually the root directory
     schedule:
       interval: "weekly"
