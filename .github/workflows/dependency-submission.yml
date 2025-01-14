@@ -5,34 +5,37 @@ on:
   pull_request:
     branches:
       - main
- 
+
 jobs:
   submit-dependencies:
     runs-on: macos-latest
- 
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v3
- 
+
       # Step 2: Set up CocoaPods
       - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           pod install
- 
-      # Step 3: Analyze CocoaPods dependencies
-      - name: Analyze Dependencies
-        id: analyze-dependencies
+
+      # Step 3: Install CycloneDX CocoaPods Plugin
+      - name: Install CycloneDX CocoaPods Plugin
         run: |
-          pod dependencies --json > dependencies.json
-          cat dependencies.json
- 
-      # Step 4: Submit dependencies to GitHub
-      - name: Submit Dependencies
+          brew install cyclonedx/cyclonedx/cyclonedx-cocoapods
+
+      # Step 4: Generate SBOM
+      - name: Generate SBOM
+        run: |
+          cyclonedx-cocoapods --output-file sbom.xml
+
+      # Step 5: Submit SBOM to GitHub
+      - name: Submit SBOM
         uses: advanced-security/dependency-submission-action@v1
         with:
           repository: ${{ github.repository }}
           ref: ${{ github.ref }}
           job-correlator: ${{ github.run_id }}
-          dependencies: dependencies.json
+          dependencies: sbom.xml
