@@ -5,13 +5,11 @@
 
 version: 2
 updates:
-  # Check for updates to CocoaPods dependencies
   - package-ecosystem: "swift"
-    directory: "/" # Location of the Podfile
+    directory: "/"
     schedule:
-      interval: "daily" # Check for updates daily
+      interval: "weekly"
     ignore:
-      # Example: Ignore updates for specific dependencies
       - dependency-name: "Alamofire"
-        versions: ["~> 5.2"]
-  # Optional: Add any additional configurations or ecosystems if necessary
+        versions: ["<5.6"]
+
