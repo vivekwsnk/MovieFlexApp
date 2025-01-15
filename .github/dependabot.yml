@@ -5,8 +5,13 @@
 
 version: 2
 updates:
-  # For CocoaPods dependencies
-  - package-ecosystem: "swift"
-    directory: "/" # Path to your Podfile, usually the root directory
+  # Check for updates to CocoaPods dependencies
+  - package-ecosystem: "cocoapods"
+    directory: "/" # Location of the Podfile
     schedule:
-      interval: "weekly"
+      interval: "daily" # Check for updates daily
+    ignore:
+      # Example: Ignore updates for specific dependencies
+      - dependency-name: "Alamofire"
+        versions: ["~> 5.2"]
+  # Optional: Add any additional configurations or ecosystems if necessary
