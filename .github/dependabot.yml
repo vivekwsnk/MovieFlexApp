@@ -6,7 +6,7 @@
 version: 2
 updates:
   # Check for updates to CocoaPods dependencies
-  - package-ecosystem: "cocoapods"
+  - package-ecosystem: "swift"
     directory: "/" # Location of the Podfile
     schedule:
       interval: "daily" # Check for updates daily
